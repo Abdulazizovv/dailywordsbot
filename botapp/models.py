@@ -34,6 +34,7 @@ class Word(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     word = models.CharField(max_length=255)
     meaning = models.TextField()
+    description = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
