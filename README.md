@@ -1,10 +1,7 @@
 
-# Aiogram + Django telegram bot
+# WordWise
 
-Django and aiogram telegram bot template
-
-In this case, aiogram can work with the database using Django ORM
-
+this project help to users for learn new words or memorize this words using quiz
 
 
 ## Run Locally
@@ -12,13 +9,13 @@ In this case, aiogram can work with the database using Django ORM
 Clone the project
 
 ```bash
-  git clone https://github.com/Abdulazizovv/django-aiogram-tg-bot-template.git
+git clone https://github.com/Abdulazizovv/dailywordsbot.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd django-aiogram-tg-bot-template
+  cd dailywordsbot
 ```
 Create .env file and write this lines:
 ```bash
@@ -42,4 +39,54 @@ or
 ```bash
   python3 manage.py app
 ```
+
+
+
+## API Reference
+
+#### Get all bot users
+
+```http
+  GET /api/bot-users/
+```
+**Example response body**
+```json
+[
+  {
+        "id": int,
+        "user_id": string,
+        "first_name": string,
+        "last_name": string,
+        "phone_number": string | null,
+        "username": string,
+        "created": timestamp,
+        "updated": timestamp
+  }
+]
+```
+
+#### Get item
+
+```http
+  GET /api/bot-users/{id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `int` | **Required**. ID of bot user *not telegram user id* |
+
+**Example response body**
+```json
+{
+      "id": int,
+      "user_id": string,
+      "first_name": string,
+      "last_name": string,
+      "phone_number": string | null,
+      "username": string,
+      "created": timestamp,
+      "updated": timestamp
+}
+```
+
 
