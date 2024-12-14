@@ -33,6 +33,13 @@ class CategoryListCreateView(generics.ListCreateAPIView):
 category_view = CategoryListCreateView.as_view()
 
 
+class PublicCategoryListView(generics.ListAPIView):
+    queryset = Category.objects.filter(is_public=True)
+    serializer_class = CategorySerializer
+
+public_category_view = PublicCategoryListView.as_view()
+
+
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
