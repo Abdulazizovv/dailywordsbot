@@ -77,3 +77,58 @@ def create_user(data):
     """
     return post(f'{url}/api/bot-users/', data)
 
+
+# for updating a bot user
+def update_user(user_id: int, data):
+    """Update a bot user in the API database
+    Args:
+        user_id (int): The ID of the bot user not telegram user ID
+        data (dict): The data to be sent to the API
+        data = {
+            "user_id": 1, -> telegram user ID
+            "username": "test", -> telegram username
+            "first_name": "test",
+            "last_name": "test",
+            "phone_number": "123456789"|None
+        }
+    """
+    return put(f'{url}/api/bot-users/{user_id}/', data)
+
+
+# for deleting a bot user
+def delete_user(user_id: int):
+    """Delete a bot user from the API database
+    Args:
+        user_id (int): The ID of the bot user not telegram user ID
+    """
+    return delete(f'{url}/api/bot-users/{user_id}/')
+
+
+# for getting all categories from the API
+def get_categories():
+    """Get all categories from the API"""
+    return get(f'{url}/api/categories/')
+
+# for getting a single category from the API
+def get_category(category_id: int):
+    """Get a single category from the API
+    Args:
+        category_id (int): The ID of the category
+    """
+    return get(f'{url}/api/categories/{category_id}/')
+
+
+# for creating a new category
+def create_category(data):
+    """Create a new category in the API database
+    Args:
+        data (dict): The data to be sent to the API
+        data = {
+            "user_id": 1356486, -> telegram user ID
+            "title": "test",
+            "description": "test"
+        }
+    """
+    return post(f'{url}/api/categories/', data)
+
+
