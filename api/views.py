@@ -1,6 +1,6 @@
 from rest_framework import generics
-from botapp.models import BotUsers, Word
-from .serializers import BotUsersSerializer, WordSerializer, WordOptionSerializer
+from botapp.models import BotUsers, Word, Category
+from .serializers import BotUsersSerializer, WordSerializer, WordOptionSerializer, CategorySerializer
 
 class BotUsersListCreateView(generics.ListCreateAPIView):
     queryset = BotUsers.objects.all()
@@ -20,6 +20,38 @@ class BotUsersDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BotUsersSerializer
 
 bot_user_detail_view = BotUsersDetailView.as_view()
+
+
+class CategoryListCreateView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def perform_create(self, serializer):
+        owner = BotUsers.objects.get(user_id=self.request.data.get('user_id'))
+        serializer.save(owner=owner)
+
+category_view = CategoryListCreateView.as_view()
+
+
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def perform_update(self, serializer):
+        owner = BotUsers.objects.get(user_id=self.request.data.get('user_id'))
+        serializer.save(owner=owner)
+
+category_detail_view = CategoryDetailView.as_view()
+
+
+class UserCategoryListView(generics.ListAPIView):
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        return Category.objects.filter(owner__user_id=user_id)
+    
+user_category_view = UserCategoryListView.as_view()
 
 
 class WordListCreateView(generics.ListCreateAPIView):
