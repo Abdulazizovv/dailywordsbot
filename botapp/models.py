@@ -22,12 +22,7 @@ class Category(models.Model):
     owner = models.ForeignKey(BotUsers, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    type_choices = [
-        ('global', 'Global'),
-        ('private', 'Private'),
-        ('general', 'General'),
-    ]
-    type = models.CharField(max_length=255, default='private', choices=type_choices)
+    is_public = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
