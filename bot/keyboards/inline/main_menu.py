@@ -9,7 +9,7 @@ main_menu_kb = InlineKeyboardMarkup(
         ],
         [
             InlineKeyboardButton(text="📦 Categories", callback_data="categories"),
-            InlineKeyboardButton(text="📦 Add Category", callback_data="add_category")
+            InlineKeyboardButton(text="📦 Create Category", callback_data="create_category")
         ],
         [
             InlineKeyboardButton(text="📊 Statistics", callback_data="statistics")
