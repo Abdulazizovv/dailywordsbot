@@ -1,6 +1,7 @@
 import requests
 from requests.adapters import HTTPAdapter
 import logging
+import json
 
 url = 'http://localhost:8000'
 session = requests.Session()
@@ -118,6 +119,20 @@ def get_category(category_id: int):
     return get(f'{url}/api/categories/{category_id}/')
 
 
+# for updating a category
+def update_category(category_id: int, data):
+    """Update a category in the API database
+    Args:
+        category_id (int): The ID of the category
+        data (dict): The data to be sent to the API
+        data = {
+            "title": "test",
+            "description": "test"
+        }
+    """
+    return put(f'{url}/api/categories/{category_id}/', data)
+
+
 # for creating a new category
 def create_category(data):
     """Create a new category in the API database
@@ -132,3 +147,26 @@ def create_category(data):
     return post(f'{url}/api/categories/', data)
 
 
+# for deleting a category
+def delete_category(category_id: int):
+    """Delete a category from the API database
+    Args:
+        category_id (int): The ID of the category
+    """
+    return delete(f'{url}/api/categories/{category_id}/')
+
+
+# for getting all public categories from the API
+def get_public_categories():
+    """Get all public categories from the API"""
+    respone = get(f'{url}/api/categories/public/')
+    return respone
+
+
+# for getting all user categories from the API
+def get_user_categories(user_id: int):
+    """Get all user categories from the API
+    Args:
+        user_id (int): The ID of the bot telegram user ID
+    """
+    return get(f'{url}/api/categories/user/{user_id}')

@@ -1,6 +1,6 @@
 from rest_framework import generics
-from botapp.models import BotUsers, Word, Category
-from .serializers import BotUsersSerializer, WordSerializer, WordOptionSerializer, CategorySerializer
+from botapp.models import BotUsers, Word, Category, UserCategory
+from .serializers import BotUsersSerializer, WordSerializer, WordOptionSerializer, CategorySerializer, UserCategorySerializer
 
 class BotUsersListCreateView(generics.ListCreateAPIView):
     queryset = BotUsers.objects.all()
@@ -52,11 +52,9 @@ category_detail_view = CategoryDetailView.as_view()
 
 
 class UserCategoryListView(generics.ListAPIView):
-    serializer_class = CategorySerializer
+    queryset = UserCategory.objects.all()
+    serializer_class = UserCategorySerializer
 
-    def get_queryset(self):
-        user_id = self.kwargs['user_id']
-        return Category.objects.filter(owner__user_id=user_id)
     
 user_category_view = UserCategoryListView.as_view()
 
