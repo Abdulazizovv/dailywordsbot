@@ -170,3 +170,13 @@ def get_user_categories(user_id: int):
         user_id (int): The ID of the bot telegram user ID
     """
     return get(f'{url}/api/categories/user/{user_id}')
+
+
+# for getting all private user categories from the API
+def get_private_user_categories(user_id: int):
+    """Get all private user categories from the API
+    Args:
+        user_id (int): The ID of the bot telegram user ID
+    """
+    return get(f'{url}/api/categories/private/{user_id}/')
+
