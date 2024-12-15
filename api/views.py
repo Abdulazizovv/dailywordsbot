@@ -40,6 +40,17 @@ class PublicCategoryListView(generics.ListAPIView):
 public_category_view = PublicCategoryListView.as_view()
 
 
+class PrivateUserCategoryListView(generics.ListAPIView):
+    queryset = Category.objects.filter(is_public=False)
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        user = BotUsers.objects.get(user_id=self.kwargs['user_id'])
+        return Category.objects.filter(owner=user)
+
+private_user_category_view = PrivateUserCategoryListView.as_view()
+
+
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -49,6 +60,22 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer.save(owner=owner)
 
 category_detail_view = CategoryDetailView.as_view()
+
+
+class UserCategoryListCreateView(generics.ListCreateAPIView):
+    queryset = UserCategory.objects.all()
+    serializer_class = UserCategorySerializer
+
+    def get_queryset(self):
+        user = BotUsers.objects.get(user_id=self.kwargs['user_id'])
+        return UserCategory.objects.filter(user=user).first()
+
+    def perform_create(self, serializer):
+        user = BotUsers.objects.get(user_id=self.request.data.get('user_id'))
+        category = Category.objects.get(id=self.request.data.get('category'))
+        serializer.save(user=user, category=category)
+
+user_category_view = UserCategoryListCreateView.as_view()
 
 
 class UserCategoryListView(generics.ListAPIView):
@@ -75,3 +102,5 @@ class WordDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = WordSerializer
 
 word_detail_view = WordDetailView.as_view()
+
+

@@ -56,15 +56,15 @@ class UserWord(models.Model):
     
 
 class UserCategory(models.Model):
-    user = models.ForeignKey(BotUsers, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    user = models.OneToOneField(BotUsers, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category)
     is_favorite = models.BooleanField(default=False)
     is_learned = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.category.title
+        return self.user.first_name
     
 
 class WordOption(models.Model):

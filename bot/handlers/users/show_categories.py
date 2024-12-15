@@ -21,8 +21,8 @@ async def show_all_categories(call: types.CallbackQuery):
         await call.message.answer("There are no public categories yet😔", reply_markup=create_category_keyboard())
         return
     categories_list_text = ""
-    for category in categories[:CATEGORY_PER_PAGE]:
-        categories_list_text += f"{category['id']}. {category['title']} - {category['description']}\n"
+    for idx, category in enumerate(categories[:CATEGORY_PER_PAGE]):
+        categories_list_text += f"{idx+1}. {category['title']} - {category['description']}\n"
     await call.message.answer(f"Public categories\n"
                               f"{categories_list_text}", reply_markup=get_categories_keyboard(categories, per_page=CATEGORY_PER_PAGE))
 
@@ -30,13 +30,13 @@ async def show_all_categories(call: types.CallbackQuery):
 @dp.callback_query_handler(text="my_categories")
 async def show_my_categories(call: types.CallbackQuery):
     await call.message.delete()
-    categories = get_user_categories(call.message.from_user.id)
+    categories = get_user_categories(call.message.from_user.id)[0]['category']
     if not categories:
         await call.message.answer("You don't have any categories yet😔", reply_markup=create_category_keyboard())
         return
     categories_list_text = ""
-    for category in categories[:CATEGORY_PER_PAGE]:
-        categories_list_text += f"{category['id']}. {category['category']['title']} - {category['category']['description']}\n"
+    for idx, category in enumerate(categories[:CATEGORY_PER_PAGE]):
+        categories_list_text += f"{idx+1}. {category['title']} - {category['description']}\n"
     await call.message.answer("Your categories:\n"
                               f"{categories_list_text}", reply_markup=get_categories_keyboard(categories, per_page=CATEGORY_PER_PAGE))
 

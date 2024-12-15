@@ -10,19 +10,22 @@ class BotUsersSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     owner = BotUsersSerializer(read_only=True)
+    owner_id = serializers.PrimaryKeyRelatedField(queryset=BotUsers.objects.all(), write_only=True, source='owner')
 
     class Meta:
         model = Category
-        fields = ['id', 'owner', 'title', 'description', 'created', 'updated']
+        fields = ['id', 'owner', 'owner_id', 'title', 'description', 'is_public', 'created', 'updated']
 
 
 class UserCategorySerializer(serializers.ModelSerializer):
     user = BotUsersSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(queryset=BotUsers.objects.all(), write_only=True, source='user')
+    category = CategorySerializer(many=True, read_only=True)
+    category_ids = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, write_only=True, source='category')
 
     class Meta:
         model = UserCategory
-        fields = ['id', 'user', 'category', 'is_favorite', 'is_learned', 'created', 'updated']
+        fields = ['id', 'user', 'user_id', 'category', 'category_ids', 'is_favorite', 'is_learned', 'created', 'updated']
 
 
 class WordOptionSerializer(serializers.ModelSerializer):
@@ -66,8 +69,10 @@ class WordSerializer(serializers.ModelSerializer):
 
 class UserWordSerializer(serializers.ModelSerializer):
     user = BotUsersSerializer(read_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(queryset=BotUsers.objects.all(), write_only=True, source='user')
     word = WordSerializer(read_only=True)
+    word_id = serializers.PrimaryKeyRelatedField(queryset=Word.objects.all(), write_only=True, source='word')
 
     class Meta:
         model = UserWord
-        fields = ['id', 'user', 'word', 'is_favorite', 'is_learned', 'created', 'updated']
+        fields = ['id', 'user', 'user_id', 'word', 'word_id', 'is_favorite', 'is_learned', 'created', 'updated']

@@ -1,123 +1,46 @@
 from django.contrib import admin
-from .models import BotUsers, Word, WordOption, Category, UserWord, UserCategory
+from .models import BotUsers, Category, Word, UserWord, UserCategory, WordOption
 
 
+@admin.register(BotUsers)
 class BotUsersAdmin(admin.ModelAdmin):
+    list_display = ('user_id', 'first_name', 'last_name', 'username', 'phone_number', 'created', 'updated')
+    search_fields = ('first_name', 'last_name', 'username', 'phone_number', 'user_id')
     list_filter = ('created', 'updated')
-    search_fields = ('usr_id', 'username', 'first_name', 'last_name')
-    date_hierarchy = 'created'
-    ordering = ('-created',)
-    readonly_fields = ('created', 'updated')
-    list_display_links = ('user_id', 'first_name')
-
-    def formatted_created(self, obj):
-        return obj.created.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_created.admin_order_field = 'created'
-    formatted_created.short_description = 'Created'
-
-    def formatted_updated(self, obj):
-        return obj.updated.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_updated.admin_order_field = 'updated'
-    formatted_updated.short_description = 'Updated'
-
-    list_display = ('id', 'user_id', 'username', 'first_name', 'last_name', 'formatted_created', 'formatted_updated')
 
 
-admin.site.register(BotUsers, BotUsersAdmin)
-
-
-class WordOptionInline(admin.TabularInline):
-    model = WordOption
-    extra = 1
-
-
-class WordAdmin(admin.ModelAdmin):
-    inlines = [WordOptionInline]
-    list_filter = ('created', 'updated')
-    search_fields = ('word', 'meaning')
-    date_hierarchy = 'created'
-    ordering = ('-created',)
-    readonly_fields = ('created', 'updated')
-    list_display_links = ('word',)
-
-    def formatted_created(self, obj):
-        return obj.created.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_created.admin_order_field = 'created'
-    formatted_created.short_description = 'Created'
-
-    def formatted_updated(self, obj):
-        return obj.updated.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_updated.admin_order_field = 'updated'
-    formatted_updated.short_description = 'Updated'
-
-    list_display = ('id', 'word', 'author', 'category', 'formatted_created', 'formatted_updated')
-
-
-admin.site.register(Word, WordAdmin)
-
-
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    search_fields = ('owner', 'title', 'description')
-    list_filter = ('owner', 'created', 'updated')
-    readonly_fields = ('created', 'updated')
-
-    def formatted_created(self, obj):
-        return obj.created.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_created.admin_order_field = 'created'
-    formatted_created.short_description = 'Created'
-
-    def formatted_updated(self, obj):
-        return obj.updated.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_updated.admin_order_field = 'updated'
-    formatted_updated.short_description = 'Updated'
-    list_display = ('owner', 'title', 'description', 'formatted_created', 'formatted_updated')
+    list_display = ('title', 'owner', 'is_public', 'created', 'updated')
+    search_fields = ('title', 'description', 'owner__first_name', 'owner__last_name')
+    list_filter = ('is_public', 'created', 'updated')
 
 
-admin.site.register(Category, CategoryAdmin)
+@admin.register(Word)
+class WordAdmin(admin.ModelAdmin):
+    list_display = ('word', 'author', 'category', 'created', 'updated')
+    search_fields = ('word', 'meaning', 'description', 'author__first_name', 'category__title')
+    list_filter = ('created', 'updated')
+    autocomplete_fields = ('author', 'category')
 
 
+@admin.register(UserWord)
 class UserWordAdmin(admin.ModelAdmin):
-    search_fields = ('user', 'word', 'word__category__title')
-    list_filter = ('user', 'word', 'word__category', 'created', 'updated')
-    date_hierarchy = 'created'
-    ordering = ('-created',)
-    readonly_fields = ('created', 'updated')
-
-    def formatted_created(self, obj):
-        return obj.created.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_created.admin_order_field = 'created'
-    formatted_created.short_description = 'Created'
+    list_display = ('user', 'word', 'is_favorite', 'is_learned', 'created', 'updated')
+    search_fields = ('user__first_name', 'word__word')
+    list_filter = ('is_favorite', 'is_learned', 'created', 'updated')
 
 
-    def formatted_updated(self, obj):
-        return obj.updated.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_updated.admin_order_field = 'updated'
-    formatted_updated.short_description = 'Updated'
-
-    list_display = ('user', 'word', 'is_favorite', 'is_learned', 'formatted_created', 'formatted_updated')
-
-
-admin.site.register(UserWord, UserWordAdmin)
-
-
+@admin.register(UserCategory)
 class UserCategoryAdmin(admin.ModelAdmin):
-    search_fields = ('user', 'category')
-    list_filter = ('user', 'category', 'created', 'updated')
-    date_hierarchy = 'created'
-    ordering = ('-created',)
-    readonly_fields = ('created', 'updated')
-
-    def formatted_created(self, obj):
-        return obj.created.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_created.admin_order_field = 'created'
-    formatted_created.short_description = 'Created'
-
-    def formatted_updated(self, obj):
-        return obj.updated.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_updated.admin_order_field = 'updated'
-    formatted_updated.short_description = 'Updated'
-
-    list_display = ('user', 'category', 'formatted_created', 'formatted_updated')
+    list_display = ('user', 'is_favorite', 'is_learned', 'created', 'updated')
+    search_fields = ('user__first_name', 'category__title')
+    list_filter = ('is_favorite', 'is_learned', 'created', 'updated')
+    filter_horizontal = ('category',)
 
 
-admin.site.register(UserCategory, UserCategoryAdmin)
+@admin.register(WordOption)
+class WordOptionAdmin(admin.ModelAdmin):
+    list_display = ('word', 'option', 'is_correct', 'created', 'updated')
+    search_fields = ('word__word', 'option')
+    list_filter = ('is_correct', 'created', 'updated')

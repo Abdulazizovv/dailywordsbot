@@ -11,4 +11,5 @@ urlpatterns = [
     path('categories/<int:pk>/', views.category_detail_view, name='category_detail'),
     path('categories/user/<int:user_id>/', views.user_category_view, name='user_categories'),
     path('categories/public/', views.public_category_view, name='public_categories'),
+    path('categories/private/<int:user_id>/', views.private_user_category_view, name='private_user_categories'),
 ]
