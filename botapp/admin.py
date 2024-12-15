@@ -74,3 +74,50 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category, CategoryAdmin)
+
+
+class UserWordAdmin(admin.ModelAdmin):
+    search_fields = ('user', 'word', 'word__category__title')
+    list_filter = ('user', 'word', 'word__category', 'created', 'updated')
+    date_hierarchy = 'created'
+    ordering = ('-created',)
+    readonly_fields = ('created', 'updated')
+
+    def formatted_created(self, obj):
+        return obj.created.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_created.admin_order_field = 'created'
+    formatted_created.short_description = 'Created'
+
+
+    def formatted_updated(self, obj):
+        return obj.updated.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_updated.admin_order_field = 'updated'
+    formatted_updated.short_description = 'Updated'
+
+    list_display = ('user', 'word', 'is_favorite', 'is_learned', 'formatted_created', 'formatted_updated')
+
+
+admin.site.register(UserWord, UserWordAdmin)
+
+
+class UserCategoryAdmin(admin.ModelAdmin):
+    search_fields = ('user', 'category')
+    list_filter = ('user', 'category', 'created', 'updated')
+    date_hierarchy = 'created'
+    ordering = ('-created',)
+    readonly_fields = ('created', 'updated')
+
+    def formatted_created(self, obj):
+        return obj.created.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_created.admin_order_field = 'created'
+    formatted_created.short_description = 'Created'
+
+    def formatted_updated(self, obj):
+        return obj.updated.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_updated.admin_order_field = 'updated'
+    formatted_updated.short_description = 'Updated'
+
+    list_display = ('user', 'category', 'formatted_created', 'formatted_updated')
+
+
+admin.site.register(UserCategory, UserCategoryAdmin)
